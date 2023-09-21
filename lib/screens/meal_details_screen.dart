@@ -26,17 +26,32 @@ class MealDetailsScreen extends ConsumerWidget {
                         wasAdded ? 'Meal added as a favoriate' : 'Meal Remove'),
                   ));
                 },
-                icon:  Icon(isFev ? Icons.star : Icons.star_border))
+                icon: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) {
+                    return RotationTransition(turns: Tween<double>(
+                      begin: 0.8, end: 1.0,
+                    ).animate(animation), child: child);
+                  },
+                  child: Icon(
+                    isFev ? Icons.star : Icons.star_border,
+                    key: ValueKey(isFev),
+                    ),
+                  ), 
+                ),
           ],
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Image.network(
+              Hero(
+              tag: meal.id, 
+              child: Image.network(
                 meal.imageUrl,
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,
+              ),
               ),
               const SizedBox(height: 14),
               Text(
@@ -77,6 +92,7 @@ class MealDetailsScreen extends ConsumerWidget {
                 ),
             ],
           ),
-        ));
+        )
+        );
   }
 }
